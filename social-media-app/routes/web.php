@@ -1,18 +1,24 @@
 <?php
 
+use App\Http\Controllers\CommentController;
+use App\Http\Controllers\PostController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
-
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register web routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| contains the "web" middleware group. Now create something great!
-|
-*/
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::post('/users/create',[UserController::class, 'createUser']);
+Route::post('/users/{user}/post',[PostController::class, 'createPost']);
+Route::post('/users/{user}/post/{post}/comment',[CommentController::class, 'createComment']);
+
+
+Route::get('/post/{user}',[UserController::class, 'fetchPosts']);
+Route::get('/post/comment/{post}', [PostController::class, 'getComment']);
+
+
+Route::fallback(function(){
+    return response()->json([
+        'message' => 'Page Not Found. If error persists, contact the admin'], 404);
 });
